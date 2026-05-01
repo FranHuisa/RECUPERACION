@@ -1,7 +1,5 @@
 package com.bibliotecawisa.Model;
 
-package com.biblioteca.model.entity;
-
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
