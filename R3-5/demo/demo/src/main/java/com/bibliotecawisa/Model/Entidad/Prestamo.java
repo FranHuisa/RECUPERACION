@@ -1,4 +1,4 @@
-package com.bibliotecawisa.Model;
+package com.bibliotecawisa.Model.Entidad;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
