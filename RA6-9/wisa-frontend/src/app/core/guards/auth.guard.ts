@@ -1,21 +1,18 @@
-import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 /**
- * Interceptor funcional que añade el token JWT como cabecera Authorization
- * a todas las peticiones HTTP salientes cuando el usuario está autenticado.
+ * Guard funcional que protege rutas privadas.
+ * Redirige a /auth/login si el usuario no está autenticado.
  */
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
+export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
-  const token = authService.getToken();
+  const router = inject(Router);
 
-  if (token) {
-    const cloned = req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` }
-    });
-    return next(cloned);
+  if (authService.isAuthenticated()) {
+    return true;
   }
 
-  return next(req);
+  return router.createUrlTree(['/auth/login']);
 };
