@@ -70,6 +70,7 @@ export class RegisterComponent {
   });
 
   onSubmit(): void {
+    console.log(this.form.value);
     if (this.form.invalid) return;
 
     this.loading = true;
