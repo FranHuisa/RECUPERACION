@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../core/services/product.service';
@@ -18,12 +18,12 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
         <a *ngIf="auth.isAdmin()" routerLink="/products/new" class="btn-primary">+ Nuevo producto</a>
       </div>
 
-      <app-spinner *ngIf="loading" />
+      <app-spinner *ngIf="loading()" />
 
       <div class="alert-error" *ngIf="errorMsg">{{ errorMsg }}</div>
       <div class="alert-success" *ngIf="successMsg">{{ successMsg }}</div>
 
-      <div class="grid" *ngIf="!loading">
+      <div class="grid" *ngIf="!loading()">
         <div class="card" *ngFor="let product of products">
           <h3>{{ product.name }}</h3>
           <p class="card-meta">{{ product.category?.name }}</p>
@@ -35,7 +35,6 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
             <button *ngIf="auth.isAdmin()" (click)="askDelete(product)" class="btn-danger">Eliminar</button>
           </div>
         </div>
-
         <p *ngIf="products.length === 0" class="empty-state">No hay productos disponibles.</p>
       </div>
 
@@ -54,7 +53,7 @@ export class ProductListComponent implements OnInit {
   auth = inject(AuthService);
 
   products: Product[] = [];
-  loading = false;
+  loading = signal(false);
   errorMsg = '';
   successMsg = '';
   showConfirm = false;
@@ -65,15 +64,15 @@ export class ProductListComponent implements OnInit {
   }
 
   load(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.productService.getAll().subscribe({
       next: data => {
         this.products = data;
-        this.loading = false;
+        this.loading.set(false);
       },
       error: () => {
         this.errorMsg = 'Error al cargar los productos.';
-        this.loading = false;
+        this.loading.set(false);
       }
     });
   }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../core/services/product.service';
@@ -14,10 +14,10 @@ import { SpinnerComponent } from '../../../shared/components/spinner/spinner.com
     <div class="page-container">
       <a routerLink="/products" class="btn-back">← Volver a productos</a>
 
-      <app-spinner *ngIf="loading" />
+      <app-spinner *ngIf="loading()" />
       <div class="alert-error" *ngIf="errorMsg">{{ errorMsg }}</div>
 
-      <div class="detail-card" *ngIf="product && !loading">
+      <div class="detail-card" *ngIf="product && !loading()">
         <h1>{{ product.name }}</h1>
         <span class="badge">{{ product.category?.name }}</span>
         <p class="detail-description">{{ product.description }}</p>
@@ -38,20 +38,20 @@ export class ProductDetailComponent implements OnInit {
   auth = inject(AuthService);
 
   product: Product | null = null;
-  loading = false;
+  loading = signal(false);
   errorMsg = '';
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.loading = true;
+    this.loading.set(true); 
     this.productService.getById(id).subscribe({
       next: data => {
         this.product = data;
-        this.loading = false;
+        this.loading.set(false);
       },
       error: () => {
         this.errorMsg = 'Producto no encontrado.';
-        this.loading = false;
+        this.loading.set(false);
       }
     });
   }
