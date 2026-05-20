@@ -10,6 +10,14 @@ export const PRODUCTS_ROUTES: Routes = [
   {
     path: 'new',
     canActivate: [roleGuard],
+    data: { role: 'ROLE_ADMIN' },
+    loadComponent: () =>
+      import('./product-form/product-form.component').then(m => m.ProductFormComponent)
+  },
+  {
+    path: ':id/edit',
+    canActivate: [roleGuard],
+    data: { role: 'ROLE_ADMIN' },
     loadComponent: () =>
       import('./product-form/product-form.component').then(m => m.ProductFormComponent)
   },
@@ -17,11 +25,5 @@ export const PRODUCTS_ROUTES: Routes = [
     path: ':id',
     loadComponent: () =>
       import('./product-detail/product-detail.component').then(m => m.ProductDetailComponent)
-  },
-  {
-    path: ':id/edit',
-    canActivate: [roleGuard],
-    loadComponent: () =>
-      import('./product-form/product-form.component').then(m => m.ProductFormComponent)
   }
 ];
