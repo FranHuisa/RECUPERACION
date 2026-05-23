@@ -35,7 +35,6 @@ public class TareaService {
         buscarPorId(id)
                 .ifPresent(t -> t.setCompletada(true));
     }
-    // STREAMS OBLIGATORIOS
 
     // Filter
     public List<Tarea> tareasPendientes() {
