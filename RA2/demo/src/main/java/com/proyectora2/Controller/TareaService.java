@@ -50,7 +50,7 @@ public class TareaService {
                 .collect(Collectors.toList());
     }
 
-    // Count (agregación)
+    // Count
     public long contarCompletadas() {
         return tareas.stream()
                 .filter(Tarea::isCompletada)
