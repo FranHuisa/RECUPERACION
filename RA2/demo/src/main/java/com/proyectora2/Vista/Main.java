@@ -18,7 +18,8 @@ public class Main {
             System.out.println("2. Listar tareas");
             System.out.println("3. Buscar tarea");
             System.out.println("4. Eliminar tarea");
-            System.out.println("5. Salir");
+            System.out.println("5. Completar tarea");
+            System.out.println("6. Salir");
             System.out.print("Opción: ");
 
             opcion = sc.nextInt();
@@ -50,8 +51,7 @@ public class Main {
                     service.buscarPorId(buscarId)
                             .ifPresentOrElse(
                                     System.out::println,
-                                    () -> System.out.println("No encontrada")
-                            );
+                                    () -> System.out.println("No encontrada"));
                     break;
 
                 case 4:
@@ -59,13 +59,19 @@ public class Main {
                     int eliminarId = sc.nextInt();
                     service.eliminarTarea(eliminarId);
                     break;
-
                 case 5:
+                    System.out.print("ID de la tarea completada: ");
+                    int completarId = sc.nextInt();
+
+                    service.completarTarea(completarId);
+                    System.out.println("Tarea completada.");
+                    break;
+                case 6:
                     System.out.println("Saliendo...");
                     break;
             }
 
-        } while (opcion != 5);
+        } while (opcion != 6);
 
         sc.close();
     }

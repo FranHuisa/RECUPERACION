@@ -1,4 +1,5 @@
 package com.proyectora2.Controller;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,42 +19,46 @@ public class TareaService {
         tareas.forEach(System.out::println);
     }
 
-    // BUSCAR (Optional)
+    // BUSCAR
     public Optional<Tarea> buscarPorId(int id) {
         return tareas.stream()
                 .filter(t -> t.getId() == id)
                 .findFirst();
     }
-
+    
     // ELIMINAR
     public void eliminarTarea(int id) {
         tareas.removeIf(t -> t.getId() == id);
     }
-
+    // ACTUALIZAR
+    public void completarTarea(int id) {
+        buscarPorId(id)
+                .ifPresent(t -> t.setCompletada(true));
+    }
     // STREAMS OBLIGATORIOS
 
-    // 1. Filter
+    // Filter
     public List<Tarea> tareasPendientes() {
         return tareas.stream()
                 .filter(t -> !t.isCompletada())
                 .collect(Collectors.toList());
     }
 
-    // 2. Map
+    // Map
     public List<String> obtenerTitulos() {
         return tareas.stream()
                 .map(Tarea::getTitulo)
                 .collect(Collectors.toList());
     }
 
-    // 3. Count (agregación)
+    // Count (agregación)
     public long contarCompletadas() {
         return tareas.stream()
                 .filter(Tarea::isCompletada)
                 .count();
     }
 
-    // 4. Sorted
+    // Sorted
     public List<Tarea> ordenarPorPrioridad() {
         return tareas.stream()
                 .sorted(Comparator.comparing(Tarea::getPrioridad))
