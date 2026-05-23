@@ -19,7 +19,8 @@ public class Main {
             System.out.println("3. Buscar tarea");
             System.out.println("4. Eliminar tarea");
             System.out.println("5. Completar tarea");
-            System.out.println("6. Salir");
+            System.out.println("6. Numeros de tareas completadas");
+            System.out.println("7. Salir");
             System.out.print("Opción: ");
 
             opcion = sc.nextInt();
@@ -67,11 +68,15 @@ public class Main {
                     System.out.println("Tarea completada.");
                     break;
                 case 6:
+                    long tareasCompletadas = service.contarCompletadas();
+                    System.out.println("Tareas completadas: " + tareasCompletadas);
+                    break;
+                case 7:
                     System.out.println("Saliendo...");
                     break;
             }
 
-        } while (opcion != 6);
+        } while (opcion != 7);
 
         sc.close();
     }
