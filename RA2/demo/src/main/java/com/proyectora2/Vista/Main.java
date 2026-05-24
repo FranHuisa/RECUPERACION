@@ -1,5 +1,6 @@
 package com.proyectora2.Vista;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.proyectora2.Controller.TareaService;
@@ -20,7 +21,8 @@ public class Main {
             System.out.println("4. Eliminar tarea");
             System.out.println("5. Completar tarea");
             System.out.println("6. Numeros de tareas completadas");
-            System.out.println("7. Salir");
+            System.out.println("7. Orden de prioridad");
+            System.out.println("8. Salir");
             System.out.print("Opción: ");
 
             opcion = sc.nextInt();
@@ -72,11 +74,18 @@ public class Main {
                     System.out.println("Tareas completadas: " + tareasCompletadas);
                     break;
                 case 7:
+                    List<Tarea> ordenadas = service.ordenarPorPrioridad();
+
+                    System.out.println("Tareas ordenadas por prioridad:");
+                    ordenadas.forEach(System.out::println);
+
+                    break;
+                case 8:
                     System.out.println("Saliendo...");
                     break;
             }
 
-        } while (opcion != 7);
+        } while (opcion != 8);
 
         sc.close();
     }

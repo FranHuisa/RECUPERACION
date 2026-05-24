@@ -17,3 +17,8 @@ INSERT INTO usuarios (nombre, apellido, email, telefono, activo) VALUES
 ('Carlos', 'López', 'carlos.lopez@email.com', '623456789', true),
 ('María', 'García', 'maria.garcia@email.com', '634567890', true),
 ('Pedro', 'Sánchez', 'pedro.sanchez@email.com', '645678901', true);
+
+INSERT INTO prestamos (usuario_id,libro_id,fecha_prestamo,fecha_devolucion_prevista,fecha_devolucion_real,estado) VALUES
+(1, 2, '2026-05-20', '2026-05-27', NULL, 'ACTIVO'),
+(2, 1, '2026-05-18', '2026-05-25', '2026-05-22', 'DEVUELTO'),
+(3, 3, '2026-05-19', '2026-05-26', NULL, 'ACTIVO');
