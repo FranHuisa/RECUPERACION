@@ -23,7 +23,7 @@ El sistema permite gestionar una biblioteca con autenticación JWT, roles de usu
 ## Estructura del proyecto
 
 ```
-enunciado3/
+RA6-9/
 ├── docker-compose.yml
 ├── .env
 ├── README.md
@@ -88,7 +88,7 @@ Las variables se configuran en el fichero `.env` en la raíz del proyecto.
 Requisitos: Docker y Docker Compose instalados.
 
 ```bash
-cd enunciado3
+cd RA6-9
 docker-compose up --build
 ```
 
