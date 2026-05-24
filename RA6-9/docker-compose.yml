@@ -1,0 +1,52 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: wisa-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-wisadb}
+      MYSQL_USER: ${MYSQL_USER:-wisa}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-wisa1234}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  backend:
+    build:
+      context: ./wisa-backend
+    container_name: wisa-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-wisadb}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER:-wisa}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD:-wisa1234}
+      JWT_SECRET: wisaSecretKey2026XyZ9876543210AbCdEfGhIjKlMnOpQrStUvWxYz1234567890
+      JWT_EXPIRATION: ${JWT_EXPIRATION:-86400000}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      SPRING_SQL_INIT_MODE: always
+      SPRING_JPA_DEFER_DATASOURCE_INITIALIZATION: "true"
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: on-failure
+
+  frontend:
+    build:
+      context: ./wisa-frontend
+    container_name: wisa-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
