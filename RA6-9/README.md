@@ -75,7 +75,7 @@ Las variables se configuran en el fichero `.env` en la raíz del proyecto.
 | MYSQL_DATABASE       | wisadb                                    | Nombre de la base de datos    |
 | MYSQL_USER           | wisa                                      | Usuario de la base de datos   |
 | MYSQL_PASSWORD       | wisa1234                                  | Contraseña del usuario        |
-| JWT_SECRET           | wisaSecretKey2024XyZ9876543210AbCdEfGhIj  | Clave para firmar los JWT     |
+| JWT_SECRET           | wisaSecretKey2026XyZ9876543210AbCdEfGhIj  | Clave para firmar los JWT     |
 | JWT_EXPIRATION       | 86400000                                  | Expiración del token (ms)     |
 | SERVER_PORT          | 8080                                      | Puerto del backend            |
 
@@ -94,7 +94,7 @@ docker-compose up --build
 
 - Frontend: http://localhost:4200
 - Backend API: http://localhost:8080
-- MySQL: localhost:3306
+- MySQL: localhost:3307
 
 Para detener los servicios:
 
