@@ -1,65 +1,68 @@
 package com.proyectora2.Controller;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.proyectora2.Model.Tarea;
 
 public class TareaService {
 
-    private List<Tarea> tareas = new ArrayList<>();
+    private Repositorio<Tarea> repo = new Repositorio<>();
 
     // ALTA
     public void agregarTarea(Tarea tarea) {
-        tareas.add(tarea);
+        repo.guardar(tarea);
     }
 
     // LISTAR
     public void listarTareas() {
-        tareas.forEach(System.out::println);
+        repo.obtenerTodos().forEach(System.out::println);
     }
 
     // BUSCAR
     public Optional<Tarea> buscarPorId(int id) {
-        return tareas.stream()
+        return repo.obtenerTodos().stream()
                 .filter(t -> t.getId() == id)
                 .findFirst();
     }
-    
+
     // ELIMINAR
     public void eliminarTarea(int id) {
-        tareas.removeIf(t -> t.getId() == id);
+        repo.obtenerTodos().removeIf(t -> t.getId() == id);
     }
+
     // ACTUALIZAR
     public void completarTarea(int id) {
         buscarPorId(id)
                 .ifPresent(t -> t.setCompletada(true));
     }
 
-    // Filter
+    // FILTER
     public List<Tarea> tareasPendientes() {
-        return tareas.stream()
+        return repo.obtenerTodos().stream()
                 .filter(t -> !t.isCompletada())
                 .collect(Collectors.toList());
     }
 
-    // Map
+    // MAP
     public List<String> obtenerTitulos() {
-        return tareas.stream()
+        return repo.obtenerTodos().stream()
                 .map(Tarea::getTitulo)
                 .collect(Collectors.toList());
     }
 
-    // Count
+    // AGREGACIÓN
     public long contarCompletadas() {
-        return tareas.stream()
+        return repo.obtenerTodos().stream()
                 .filter(Tarea::isCompletada)
                 .count();
     }
 
-    // Sorted
+    // SORTED
     public List<Tarea> ordenarPorPrioridad() {
-        return tareas.stream()
+        return repo.obtenerTodos().stream()
                 .sorted(Comparator.comparing(Tarea::getPrioridad))
                 .collect(Collectors.toList());
     }
