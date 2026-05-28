@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CategoryService } from '../../../core/services/category.service';
@@ -18,11 +18,11 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
         <a *ngIf="auth.isAdmin()" routerLink="/categories/new" class="btn-primary">+ Nueva categoría</a>
       </div>
 
-      <app-spinner *ngIf="loading" />
+      <app-spinner *ngIf="loading()" />
       <div class="alert-error" *ngIf="errorMsg">{{ errorMsg }}</div>
       <div class="alert-success" *ngIf="successMsg">{{ successMsg }}</div>
 
-      <div class="grid" *ngIf="!loading">
+      <div class="grid" *ngIf="!loading()">
         <div class="card" *ngFor="let category of categories">
           <h3>{{ category.name }}</h3>
           <p>{{ category.description }}</p>
@@ -51,7 +51,7 @@ export class CategoryListComponent implements OnInit {
   auth = inject(AuthService);
 
   categories: Category[] = [];
-  loading = false;
+  loading = signal(false);
   errorMsg = '';
   successMsg = '';
   showConfirm = false;
@@ -62,15 +62,15 @@ export class CategoryListComponent implements OnInit {
   }
 
   load(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.categoryService.getAll().subscribe({
       next: data => {
         this.categories = data;
-        this.loading = false;
+        this.loading.set(false);
       },
       error: () => {
         this.errorMsg = 'Error al cargar las categorías.';
-        this.loading = false;
+        this.loading.set(false);
       }
     });
   }

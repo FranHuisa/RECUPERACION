@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -14,7 +14,7 @@ import { SpinnerComponent } from '../../../shared/components/spinner/spinner.com
       <a routerLink="/categories" class="btn-back">← Volver a categorías</a>
       <h1>{{ isEdit ? 'Editar categoría' : 'Nueva categoría' }}</h1>
 
-      <app-spinner *ngIf="loading" />
+      <app-spinner *ngIf="loading()" />
       <div class="alert-error" *ngIf="errorMsg">{{ errorMsg }}</div>
       <div class="alert-success" *ngIf="successMsg">{{ successMsg }}</div>
 
@@ -37,7 +37,7 @@ import { SpinnerComponent } from '../../../shared/components/spinner/spinner.com
 
         <div class="form-actions">
           <a routerLink="/categories" class="btn-secondary">Cancelar</a>
-          <button type="submit" [disabled]="form.invalid || loading" class="btn-primary">
+          <button type="submit" [disabled]="form.invalid || loading()" class="btn-primary">
             {{ isEdit ? 'Guardar cambios' : 'Crear categoría' }}
           </button>
         </div>
@@ -53,7 +53,7 @@ export class CategoryFormComponent implements OnInit {
 
   isEdit = false;
   categoryId: number | null = null;
-  loading = false;
+  loading = signal(false);
   errorMsg = '';
   successMsg = '';
 
@@ -67,15 +67,15 @@ export class CategoryFormComponent implements OnInit {
     if (id) {
       this.isEdit = true;
       this.categoryId = Number(id);
-      this.loading = true;
+      this.loading.set(true);
       this.categoryService.getById(this.categoryId).subscribe({
         next: category => {
           this.form.patchValue({ name: category.name, description: category.description });
-          this.loading = false;
+          this.loading.set(false);
         },
         error: () => {
           this.errorMsg = 'Error al cargar la categoría.';
-          this.loading = false;
+          this.loading.set(false);
         }
       });
     }
@@ -84,7 +84,7 @@ export class CategoryFormComponent implements OnInit {
   onSubmit(): void {
     if (this.form.invalid) return;
 
-    this.loading = true;
+    this.loading.set(true);
     this.errorMsg = '';
     const payload = this.form.value as any;
 
@@ -94,12 +94,12 @@ export class CategoryFormComponent implements OnInit {
 
     request$.subscribe({
       next: () => {
-        this.loading = false;
+        this.loading.set(false);
         this.successMsg = this.isEdit ? 'Categoría actualizada.' : 'Categoría creada.';
         setTimeout(() => this.router.navigate(['/categories']), 1200);
       },
       error: () => {
-        this.loading = false;
+        this.loading.set(false);
         this.errorMsg = 'Error al guardar la categoría.';
       }
     });
