@@ -7,13 +7,19 @@ INSERT IGNORE INTO users (username, email, password) VALUES (
     'admin@wisa.com',
     '$2a$10$rXL9hOWwDVnigVKraHX5bu/T1fZBW5gvSytyEJldLmPZvhQTsGjgq'
 );
+UPDATE users
+SET password = '$2a$10$rXL9hOWwDVnigVKraHX5bu/T1fZBW5gvSytyEJldLmPZvhQTsGjgq'
+WHERE username = 'admin';
 
 -- user / user123
 INSERT IGNORE INTO users (username, email, password) VALUES (
     'user',
     'user@wisa.com',
-    '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO1ohkfBhtS'
+    '$2a$10$zAYMtabfyCxxGVx4y6tPGOK0e9Fy5eaPJ8.hYFzxvwV7BAqS6Xw.S'
 );
+UPDATE users
+SET password = '$2a$10$zAYMtabfyCxxGVx4y6tPGOK0e9Fy5eaPJ8.hYFzxvwV7BAqS6Xw.S'
+WHERE username = 'user';
 
 INSERT IGNORE INTO user_roles (user_id, role_id)
     SELECT u.id, r.id FROM users u, roles r
